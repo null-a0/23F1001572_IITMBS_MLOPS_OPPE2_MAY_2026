@@ -98,3 +98,37 @@ Results:
 During the stress test, the HPA reached 200% CPU utilization against the 70% target and scaled the deployment to 3 replicas, which is the configured maximum.
 
 The API remained reachable with no connection, read, or write errors, but significant latency and timeout pressure was observed under 2,001 concurrent connections.
+
+## Deliverable 7 — Input Drift Analysis
+
+Input drift was analyzed by comparing the original training dataset with the 100-row generated prediction dataset.
+
+The Kolmogorov-Smirnov (KS) two-sample test was used for the 14 input features. A feature was considered to have statistically significant drift when the p-value was less than 0.05.
+
+Results:
+- Features with detected drift: 11 out of 14
+- Features without detected drift: 3 out of 14
+
+Features with detected drift:
+- `thal` — KS statistic: 0.5340, p-value: 0.0000
+- `oldpeak` — KS statistic: 0.5150, p-value: 0.0000
+- `chol` — KS statistic: 0.5002, p-value: 0.0000
+- `ca` — KS statistic: 0.4476, p-value: 0.0000
+- `fbs` — KS statistic: 0.4215, p-value: 0.0000
+- `trestbps` — KS statistic: 0.3630, p-value: 0.0000
+- `restecg` — KS statistic: 0.3468, p-value: 0.0000
+- `thalach` — KS statistic: 0.3463, p-value: 0.0000
+- `slope` — KS statistic: 0.2207, p-value: 0.0011
+- `cp` — KS statistic: 0.1841, p-value: 0.0103
+- `age` — KS statistic: 0.1673, p-value: 0.0256
+
+Features without statistically significant drift:
+- `exang` — p-value: 0.0513
+- `gender` — p-value: 0.1847
+- `sno` — p-value: 0.6388
+
+The analysis indicates that the generated prediction data has substantial distribution differences from the training data for 11 of the 14 input features. This does not by itself indicate incorrect predictions; it indicates that the input distribution has changed and should be monitored in a production environment.
+
+The drift analysis implementation and results are stored in:
+- `drift_analysis.py`
+- `data/drift_analysis.csv`

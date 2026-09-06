@@ -1,0 +1,15 @@
+feature,ks_statistic,p_value,drift_detected
+thal,0.534,0.0,True
+oldpeak,0.515,0.0,True
+chol,0.5002,0.0,True
+ca,0.4476,0.0,True
+fbs,0.4215,0.0,True
+trestbps,0.363,0.0,True
+restecg,0.3468,0.0,True
+thalach,0.3463,0.0,True
+slope,0.2207,0.0011,True
+cp,0.1841,0.0103,True
+age,0.1673,0.0256,True
+exang,0.1533,0.0513,False
+gender,0.1232,0.1847,False
+sno,0.0831,0.6388,False
