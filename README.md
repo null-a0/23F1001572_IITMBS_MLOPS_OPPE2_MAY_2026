@@ -19,11 +19,29 @@ The least impactful features based on mean absolute SHAP value were:
 
 Fairlearn was used with `age` as the sensitive attribute.
 
-Fairness disparities:
+The test data was divided into four age groups:
+- `≤40`
+- `41–50`
+- `51–60`
+- `>60`
 
-- Selection rate difference: 0.0
+Fairness metrics by age group:
+
+| Age group | Selection rate | True positive rate | False positive rate |
+|---|---:|---:|---:|
+| ≤40 | 0.8000 | 1.0 | 0.0 |
+| 41–50 | 0.6471 | 1.0 | 0.0 |
+| 51–60 | 0.6087 | 1.0 | 0.1 |
+| >60 | 0.4286 | 1.0 | 0.0 |
+
+Fairness disparities:
+- Selection rate difference: 0.3714
 - True positive rate difference: 0.0
 - False positive rate difference: 0.1
+
+The results indicate some disparity in selection rates across age groups and a smaller disparity in false-positive behavior, while the true positive rates are equal in this test set.
+
+These results should be interpreted in the context of the relatively small number of samples in each age group.
 
 ## Deliverable 4 — Dockerized API Deployment on GKE
 
