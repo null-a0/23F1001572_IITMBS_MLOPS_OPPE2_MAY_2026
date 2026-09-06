@@ -1,6 +1,16 @@
 from fastapi import FastAPI
 import joblib
 import pandas as pd
+import logging
+import json
+from datetime import datetime, timezone
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(message)s"
+)
+
+logger = logging.getLogger("heart-disease-api")
 
 app = FastAPI(
     title="Heart Disease Prediction API",
@@ -41,6 +51,14 @@ def predict(features: dict):
     input_data = pd.DataFrame([features], columns=FEATURES)
 
     prediction = model.predict(input_data)[0]
+
+    log_entry = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "input_features": features,
+        "prediction": prediction
+    }
+
+    logger.info(json.dumps(log_entry))
 
     return {
         "prediction": prediction
