@@ -50,3 +50,51 @@ GitHub Actions provides CI/CD for the application. On every push to `main`, the 
 6. Verifies the deployment.
 
 The GKE API health endpoint and prediction endpoint were successfully tested.
+
+## Deliverable 5 — Prediction Logging and Observability
+
+A random dataset containing 100 input samples was generated and each sample was sent individually to the deployed prediction API.
+
+The API logs each prediction request with:
+- Timestamp
+- Input features
+- Predicted output
+
+All 100 API requests were successful.
+
+Prediction results:
+- `no`: 59
+- `yes`: 41
+
+The container logs were verified using Kubernetes logs, showing the timestamp, input features, and prediction for individual requests. GCP Cloud Logging was also queried and returned 100 recent container log entries.
+
+The prediction dataset and resulting predictions are stored in:
+- `data/prediction_data_100.csv`
+- `data/predictions_100.csv`
+
+## Deliverable 6 — Stress Testing
+
+The deployed prediction API was stress tested using `wrk` with more than 2,000 concurrent connections.
+
+Test configuration:
+- Threads: 4
+- Concurrent connections: 2,001
+- Duration: 30 seconds
+- Request timeout: 10 seconds
+
+Results:
+- Total requests: 3,432
+- Throughput: 114.32 requests/sec
+- Average latency: 6.37 seconds
+- Median latency: 6.38 seconds
+- 75th percentile latency: 8.28 seconds
+- 90th percentile latency: 9.29 seconds
+- 99th percentile latency: 9.90 seconds
+- Connect errors: 0
+- Read errors: 0
+- Write errors: 0
+- Timeouts: 2,477
+
+During the stress test, the HPA reached 200% CPU utilization against the 70% target and scaled the deployment to 3 replicas, which is the configured maximum.
+
+The API remained reachable with no connection, read, or write errors, but significant latency and timeout pressure was observed under 2,001 concurrent connections.

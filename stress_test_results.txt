@@ -1,0 +1,42 @@
+D6 — Stress Test Results
+
+Endpoint:
+http://34.67.237.226/predict
+
+Tool:
+wrk 4.1.0
+
+Test configuration:
+Threads: 4
+Concurrent connections: 2001
+Duration: 30 seconds
+Timeout: 10 seconds
+
+Results:
+Total requests: 3432
+Throughput: 114.32 requests/sec
+Average latency: 6.37 seconds
+Median latency: 6.38 seconds
+75th percentile latency: 8.28 seconds
+90th percentile latency: 9.29 seconds
+99th percentile latency: 9.90 seconds
+
+Socket errors:
+Connect: 0
+Read: 0
+Write: 0
+Timeout: 2477
+
+HPA during/after stress test:
+CPU: 200% / 70%
+Replicas: 3
+Maximum replicas: 3
+
+Analysis:
+The API remained reachable under 2,001 concurrent connections with no
+connection, read, or write errors. However, 2,477 requests timed out
+within the 10-second timeout window. The HPA responded to the increased
+CPU utilization and scaled the deployment to the configured maximum of
+3 replicas. The results indicate that autoscaling maintained service
+availability but the application experienced significant latency and
+timeout pressure under this high-concurrency workload.
